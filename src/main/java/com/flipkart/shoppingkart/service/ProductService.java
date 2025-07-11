@@ -1,6 +1,7 @@
 package com.flipkart.shoppingkart.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,13 +28,22 @@ public class ProductService {
 	{
 		return productRepository.findById(productId).orElseThrow();
 	}
+	public Product getProductByName(String productName)
+	{
+		return productRepository.findByNameIgnoreCase(productName).orElseThrow();
+	}
 	
 	public Product addProduct(Product product)
 	{
-		return productRepository.save(product);
+		Optional<Product> optProduct = productRepository.findByNameIgnoreCase(product.getName());
+		if(optProduct.isEmpty())
+			return productRepository.save(product);
+		optProduct.get().setQuantity(product.getQuantity()+optProduct.get().getQuantity());
+		return optProduct.get();
 	}
 	
 	public String deleteProduct(Long productId)
+	
 	{
 		if(productRepository.existsById(productId))
 		{
