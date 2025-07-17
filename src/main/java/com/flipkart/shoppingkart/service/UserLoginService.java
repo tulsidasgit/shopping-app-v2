@@ -56,5 +56,12 @@ public class UserLoginService {
 				);
 	}
 	
+	public Product getProductByName(String productName)
+	{
+		return productRepository.findByNameIgnoreCase(productName).orElseThrow(
+				()->new ResourceNotFoundException("product is not available with Name: "+productName)
+				);
+	}
+	
 	
 }

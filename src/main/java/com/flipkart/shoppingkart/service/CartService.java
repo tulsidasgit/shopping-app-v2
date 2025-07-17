@@ -54,6 +54,13 @@ public class CartService {
 			return "proiduct not available";
 		}
 		
+		if(quantity>product.get().getQuantity())
+		{
+			return "Only "+product.get().getQuantity()+" quantities are available";
+		}
+		product.get().setQuantity(product.get().getQuantity() - quantity);
+		
+		// if userid and product id already present in cart then only update quantity 
 		List<Cart> productCartList = cartRepository.findByProductId(productId);
 		for(Cart cart: productCartList)
 		{
@@ -61,6 +68,7 @@ public class CartService {
 			{
 				cart.setQuantity(cart.getQuantity()+quantity);
 				cartRepository.save(cart);
+				
 				NotificationService notifier = notifyBy.equalsIgnoreCase("sms")?smsNotification:emailNotification;
 				String msg = "product: "+product.get().getName()+" added to cart";
 				notifier.sendNotification(msg, user.get().getName());
@@ -68,7 +76,7 @@ public class CartService {
 				return "product added to card and notification sent by"+notifyBy;
 			}
 		}
-		
+		// else add new entry in cart
 		Cart cart = new Cart();
 		cart.setUser(user.get());
 		cart.setProduct(product.get());

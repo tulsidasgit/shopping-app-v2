@@ -51,4 +51,10 @@ public class UserLoginController {
 	{
 		return userLoginService.getProductById(productid);
 	}
+	
+	@GetMapping("/product/name")
+	public Product getProductByName(@RequestParam String productname)
+	{
+		return userLoginService.getProductByName(productname);
+	}
 }
