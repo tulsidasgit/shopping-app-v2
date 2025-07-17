@@ -1,5 +1,5 @@
 package com.flipkart.shoppingkart.entity;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,6 +14,16 @@ public class Product {
 	private Long id;
 	private String name;
 	private Double price;
+	
+	@Column(columnDefinition = "INT DEFAULT 0")
+	private int quantity;
+	
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	public Long getId() {
 		return id;
 	}
