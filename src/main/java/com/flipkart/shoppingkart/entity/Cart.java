@@ -58,6 +58,10 @@ public class Cart {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
+	@Override
+	public String toString() {
+		return "Cart [id=" + id + ", product=" + product.getName() + ", quantity=" + quantity + ", date=" + date + "]";
+	}
 	
 	
 }

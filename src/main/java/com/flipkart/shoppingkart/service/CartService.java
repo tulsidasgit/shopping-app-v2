@@ -43,6 +43,7 @@ public class CartService {
 	{
 		Optional<User> user = userRepository.findById(userId);
 		Optional<Product> product = productRepository.findById(productId);
+		
 		//checking if user is present in database or not
 		if(user.isEmpty())
 		{
@@ -61,21 +62,21 @@ public class CartService {
 		product.get().setQuantity(product.get().getQuantity() - quantity);
 		
 		// if userid and product id already present in cart then only update quantity 
-		List<Cart> productCartList = cartRepository.findByProductId(productId);
-		for(Cart cart: productCartList)
-		{
-			if(cart.getUser().getId().equals(userId))
-			{
-				cart.setQuantity(cart.getQuantity()+quantity);
-				cartRepository.save(cart);
-				
-				NotificationService notifier = notifyBy.equalsIgnoreCase("sms")?smsNotification:emailNotification;
-				String msg = "product: "+product.get().getName()+" added to cart";
-				notifier.sendNotification(msg, user.get().getName());
-				
-				return "product added to card and notification sent by"+notifyBy;
-			}
-		}
+		Optional<Cart> productCartList = cartRepository.findByProductId(productId);
+//		for(Cart cart: productCartList)
+//		{
+//			if(cart.getUser().getId().equals(userId))
+//			{
+//				cart.setQuantity(cart.getQuantity()+quantity);
+//				cartRepository.save(cart);
+//				
+//				NotificationService notifier = notifyBy.equalsIgnoreCase("sms")?smsNotification:emailNotification;
+//				String msg = "product: "+product.get().getName()+" added to cart";
+//				notifier.sendNotification(msg, user.get().getName());
+//				
+//				return "product added to card and notification sent by"+notifyBy;
+//			}
+//		}
 		// else add new entry in cart
 		Cart cart = new Cart();
 		cart.setUser(user.get());
@@ -115,7 +116,7 @@ public class CartService {
 			// OR modify cartRepository check getbyproductid
 	}
 	
-	public List<Cart> getByProductid(Long productid)
+	public Optional<Cart> getByProductid(Long productid)
 	{
 		return  cartRepository.findByProductId(productid);
 	}

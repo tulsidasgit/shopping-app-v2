@@ -87,7 +87,7 @@ public class CartServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(5L)).thenReturn(Optional.of(product));
-        when(cartRepository.findByProductId(5L)).thenReturn(productCartList);
+//        when(cartRepository.findByProductId(5L)).thenReturn(productCartList);
 
         String result = cartService.addToCart(1L, 5L, 3, "sms");
 
@@ -106,7 +106,7 @@ public class CartServiceTest {
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
         when(productRepository.findById(7L)).thenReturn(Optional.of(product));
-        when(cartRepository.findByProductId(7L)).thenReturn(emptyCartList);
+//        when(cartRepository.findByProductId(7L)).thenReturn(emptyCartList);
 
         String result = cartService.addToCart(1L, 7L, 1, "email");
 

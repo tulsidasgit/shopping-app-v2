@@ -2,6 +2,7 @@ package com.flipkart.shoppingkart.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,19 +63,19 @@ public class CartController {
 	@GetMapping("/productid")
 	public List<String> getByProductid(@RequestParam Long productid)
 	{
-		List<Cart>productCart =  cartService.getByProductid(productid);
+		Optional<Cart>productCart =  cartService.getByProductid(productid);
 		List<String>data = new ArrayList<>();
 		int i=1;
-		for(Cart cart:productCart)
-		{
-			String msg = i++ +" Product Name: "+cart.getProduct().getName()+
-							  " Cost: "+cart.getProduct().getPrice()+
-							  " Quantity: "+cart.getQuantity()+
-							  " User id "+cart.getUser().getId()+
-							  " User Name: "+cart.getUser().getName();
-								
-			data.add(msg);
-		}
+//		for(Cart cart:productCart)
+//		{
+//			String msg = i++ +" Product Name: "+cart.getProduct().getName()+
+//							  " Cost: "+cart.getProduct().getPrice()+
+//							  " Quantity: "+cart.getQuantity()+
+//							  " User id "+cart.getUser().getId()+
+//							  " User Name: "+cart.getUser().getName();
+//								
+//			data.add(msg);
+//		}
 		return data;
 	}
 	

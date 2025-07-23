@@ -1,5 +1,7 @@
 package com.flipkart.shoppingkart.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -9,4 +11,6 @@ import com.flipkart.shoppingkart.entity.User;
 public interface UserRepository extends JpaRepository<User,Long>{
 	// JpaRepository will provide methods for 
 		//save, findById, count, deleteById, findAll(), etc
+	
+	Optional<User> findByUsernameIgnoreCase(String username);
 }

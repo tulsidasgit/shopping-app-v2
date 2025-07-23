@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.flipkart.shoppingkart.entity.Cart;
+import com.flipkart.shoppingkart.entity.Product;
 import com.flipkart.shoppingkart.entity.User;
 import com.flipkart.shoppingkart.service.UserService;
 
@@ -19,45 +21,69 @@ import com.flipkart.shoppingkart.service.UserService;
 @RequestMapping("/user")
 public class UserController {
 	
-	
 	@Autowired
 	private UserService userService;
 	
-	@GetMapping("/all")
-	public List<User> getUsers()
+	//user registration
+	@PostMapping("/register")
+	public User registerUser(@RequestBody User user)
 	{
-		return userService.getUsers();
+		return userService.registerUser(user);
 	}
 	
-	@GetMapping("/all/sorted")
-	public List<User> getUsersSorted()
-	{
-		return userService.getUsersSorted();
-	}
-	
-	@GetMapping()
-	public User getuserById(@RequestParam Long userid)
+	@GetMapping("/id")
+	public User getUserById(@RequestParam Long userid)
 	{
 		return userService.getUserById(userid);
 	}
 	
-	@PostMapping("/add")
-	public User addUser(@RequestBody User user)
-	{
-		return userService.addUser(user);
-	}
-	
 	@PutMapping("/update")
-	public User updateUser(@RequestBody User user)
+	public String updateUserName(@RequestParam Long userid, String username)
 	{
-		return userService.addUser(user);
+		return userService.updateUserName(userid,username);
 	}
 	
-	@DeleteMapping("/delete")
-	public String deleteUser(@RequestParam Long userid)
+	@GetMapping("/productlist")
+	public List<Product> getProductlist()
 	{
-		return userService.deleteUser(userid);
+		return userService.getProductlist();
 	}
 	
+	@GetMapping("/product/id")
+	public Product getProductById(@RequestParam Long productid)
+	{
+		return userService.getProductById(productid);
+	}
+	
+	@GetMapping("/product/name")
+	public Product getProductByName(@RequestParam String productname)
+	{
+		return userService.getProductByName(productname);
+	}
+	
+	
+	
+	@GetMapping("/login")
+	public String userLogin(@RequestParam String username, String password)
+	{
+		return userService.userLogin(username, password);
+	}
+	
+	@PostMapping("/cart/add")
+	public String addToCart(String productName, int quantity)
+	{
+		return userService.addToCart(productName, quantity);
+	}
+	
+	@GetMapping("/cart/get")
+	public List<String> getCart()
+	{
+		return userService.getCart();
+	}
+	
+	@DeleteMapping("/checkout")
+	public String checkout(@RequestParam Long carid)
+	{
+		return "";
+	}
 }
-
