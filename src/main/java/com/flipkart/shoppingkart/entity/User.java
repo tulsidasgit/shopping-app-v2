@@ -18,6 +18,16 @@ public class User {
 	private String name;
 	private String username;
 	private String password;
+	private Double balance=50000.0;
+	
+	public Double getBalance()
+	{
+		return balance;
+	}
+	public void setBalance(Double amt)
+	{
+		this.balance = amt;
+	}
 	public Long getId() {
 		return id;
 	}

@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.flipkart.shoppingkart.entity.Cart;
 import com.flipkart.shoppingkart.entity.Product;
@@ -29,6 +31,8 @@ public class UserService {
 	private CartRepository cartRepository;
 	
 	private User user = null;
+	
+	Scanner scanner = new Scanner(System.in);
 	
 	//user registration
 	public User registerUser(User user)
@@ -153,8 +157,87 @@ public class UserService {
 			
 		}
 	
+	public Double getCartAmount()
+	{
+		Double amount =0.0;
+		if(user == null)
+		{
+			return amount;
+		}
+		List<Cart> cartOpt = cartRepository.findAllByUserId(user.getId());
+		if(cartOpt.isEmpty())
+			return amount;
+		for(Cart cart: cartOpt)
+		{
+			amount += cart.getProduct().getPrice()*cart.getQuantity();
+		}
+		return amount;
+	}
 	
+	@Transactional
+	public String checkoutCart()
+	{
+		Double amount = this.getCartAmount();
+		if (amount==0.0)
+			return "Cart is empty";
+		if(amount > user.getBalance())
+			return "you have insufficient balance";
+		user.setBalance(user.getBalance()-amount);
+		userRepository.save(user);
+		cartRepository.deleteAllByUserId(user.getId());
+		return "Cart Items will be delevered soon";
+
+	}
 	
+	@Transactional
+	public String checkoutItems()
+	{
+		Double amount = this.getCartAmount();
+		if (amount==0.0)
+			return "Cart is empty";
+		if(amount > user.getBalance())
+			return "you have insufficient balance";
+		List<Long> productIds = new ArrayList<>();
+		List<Cart> cartOpt = cartRepository.findAllByUserId(user.getId());
+		System.out.println("Select product id");
+		for(Cart cart : cartOpt)
+		{
+			System.out.println(cart.toString());
+			System.out.println("Do you want to delete this item if yes enter quantity (enter 0 for not removal)");
+			int inputQuantity = scanner.nextInt();
+			if(inputQuantity > 0 && inputQuantity < cart.getQuantity())
+			{
+				amount +=cart.getProduct().getPrice()*inputQuantity;
+				productIds.add(cart.getProduct().getId());
+				cart.setQuantity(cart.getQuantity()-inputQuantity);
+			}
+			if(inputQuantity == cart.getQuantity())
+				{
+				productIds.add(cart.getProduct().getId());
+				cartRepository.delete(cart);
+				
+				}
+			
+		}
+		user.setBalance(user.getBalance()-amount);
+		userRepository.save(user);
+		
+		return "Cart Items will be delevered soon"+productIds;
+
+	}
 	
+	public Double getBalance()
+	{		
+		if(user!=null)
+			return userRepository.findById(user.getId()).get().getBalance();
+		return 0.0;
+	}
 	
+	public String addBalance(Double amt)
+	{
+		if(user==null)
+			return "Login first";
+		userRepository.findById(user.getId()).get().setBalance(amt+user.getBalance());
+		return amt+" added to balance";
+	}
 }

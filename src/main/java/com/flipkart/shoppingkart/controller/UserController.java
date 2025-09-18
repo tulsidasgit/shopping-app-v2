@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -61,8 +62,6 @@ public class UserController {
 		return userService.getProductByName(productname);
 	}
 	
-	
-	
 	@GetMapping("/login")
 	public String userLogin(@RequestParam String username, String password)
 	{
@@ -81,9 +80,33 @@ public class UserController {
 		return userService.getCart();
 	}
 	
-	@DeleteMapping("/checkout")
-	public String checkout(@RequestParam Long carid)
+	@GetMapping("/cart/amount")
+	public Double getCartAmount()
 	{
-		return "";
+		return userService.getCartAmount();
+	}
+	
+	@DeleteMapping("/checkout/cart")
+	public String checkoutCart()
+	{
+		return userService.checkoutCart();
+	}
+	
+	@DeleteMapping("/checkout/items")
+	public String checkoutItems()
+	{
+		return userService.checkoutItems();
+	}
+	
+	@GetMapping("/balance")
+	public Double getBalance()
+	{
+		return userService.getBalance();
+	}
+	
+	@PatchMapping("/balance/add")
+	public String addBalance(@RequestParam Double amt)
+	{
+		return userService.addBalance(amt);
 	}
 }
